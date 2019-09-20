@@ -1,25 +1,14 @@
 package de.telran;
 
 import de.telran.game.Game;
+import de.telran.game.LevelEnum;
+import de.telran.game.WrongLevelCodeException;
 import de.telran.game.state.*;
 
 import java.util.Scanner;
 
-/*
-HW:
-
-- 2 tries to guess a word;
-- 5 tries to make a mistake with letter;
-- 3 guessed letters in a row - + 300 points;
-
-Add validation and error message if user enters difficulty level that does not exist. Retry to enter difficulty level.
-
-Possible features:
-- open any letter in the word;
-- random number of points from a predefined list (50, 100, 200, 300);
-- if there is more than one guessed letter in the word;
-- multiply points by number of the same guessed letters.
- */
+import static de.telran.game.LevelEnum.*;
+import static de.telran.game.LevelEnum.SUPER_EASY;
 
 public class Main {
 
@@ -37,29 +26,27 @@ public class Main {
 
     public static void main(String[] args) {
 
+        GameState gameState = selectDifficultyLevel();
+        Game game = new Game(gameState);
+        game.startNewGame();
+
+    }
+
+    public static GameState selectDifficultyLevel() {
         System.out.print("Please choose difficulty level (1 - easy, 2 - hard, 3 - super easy):");
         Scanner scanner = new Scanner(System.in);
 
         GameState gameState = null;
 
         while (gameState == null) {
-            switch (scanner.nextInt()) {
-                case 1:
-                    gameState = new LevelDifficultyEasy();
-                    break;
-                case 2:
-                    gameState = new LevelDifficultyHard();
-                    break;
-                case 3:
-                    gameState = new LevelDifficultySuperEasy();
-                    break;
-                default:
-                    System.out.println("You entered the wrong difficulty level. Please try again.");
+            try {
+                gameState = (GameState) getLevelByLevelCode(scanner.nextInt())
+                        .getClazz()
+                        .newInstance();
+            } catch (WrongLevelCodeException | InstantiationException | IllegalAccessException e) {
+                System.out.println("You entered the wrong difficulty level. Please try again.");
             }
         }
-
-        Game game = new Game(gameState);
-        game.startNewGame();
-
+        return gameState;
     }
 }
