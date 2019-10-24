@@ -8,7 +8,6 @@ public class Main {
         LinkedList<String> list1 = new LinkedList<>();
         LinkedList<String> list2 = new LinkedList<>();
 
-
         list1.add("dd");
         list1.add("ee");
         list1.add("ff");

@@ -38,6 +38,7 @@ public class Main {
                 result.put(str, 1);
             }
         }
+
         return result;
     }
 }

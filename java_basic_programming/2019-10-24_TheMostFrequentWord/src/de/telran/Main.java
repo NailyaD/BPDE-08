@@ -39,6 +39,7 @@ public class Main {
                 frequencyOfWords.put(str, 1);
             }
         }
+
         return frequencyOfWords;
     }
 
